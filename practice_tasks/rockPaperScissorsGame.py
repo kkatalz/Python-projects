@@ -1,12 +1,18 @@
 import random
-    
+
+ROCK = "r"
+PAPER = "p"
+SCISSORS = "s"
+
 choice_icons = {
-    "r": "🪨",  # Stone
-    "p": "📄",  # Paper
-    "s": "✂️"  # Scissors
+    ROCK: "🪨",  # Stone
+    PAPER: "📄",  # Paper
+    SCISSORS: "✂️"  # Scissors
 }
 
-choices = ("r", "p", "s")
+choices = tuple(choice_icons.keys())
+
+
 
 def rock_paper_scissors_game():
     user_choice = user_choice_input(input("Rock, paper or scissors? (r/p/s): ").lower())
@@ -31,14 +37,14 @@ def rock_paper_scissors_winner(user_choice, computer_choice):
     
     if user_choice == computer_choice:
         return "It's a tie!"
-    elif ((user_choice == "r" and computer_choice == "s") or 
-         (user_choice == "s" and computer_choice == "p") or 
-         (user_choice == "p" and computer_choice == "r")) :
+    elif ((user_choice == ROCK and computer_choice == SCISSORS) or 
+         (user_choice == SCISSORS and computer_choice == PAPER) or 
+         (user_choice == PAPER and computer_choice == ROCK)) :
         return "You win!"
     
-    elif ((user_choice == "r" and computer_choice == "p") or
-         (user_choice == "s" and computer_choice == "r" ) or 
-         (user_choice == "p" and computer_choice == "s")):
+    elif ((user_choice == ROCK and computer_choice == PAPER) or
+         (user_choice == SCISSORS and computer_choice == ROCK ) or 
+         (user_choice == PAPER and computer_choice == SCISSORS)):
         return "You lose!"
     
 
