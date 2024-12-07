@@ -5,7 +5,7 @@ def quizGame(question, firstOption, secOption, thOption, fourthOption, correctAn
 
     print("\n" + question)
     print(f"\n{firstOption}\n{secOption}\n{thOption}\n{fourthOption}")
-    userAnswer = input("Your answer: ").lower()
+    userAnswer = input("Your answer: ").lower().strip()
     for i in range(len(correctAnswer)):
         correctAnswer[i] = correctAnswer[i].lower()
 
@@ -24,29 +24,33 @@ def quizGame(question, firstOption, secOption, thOption, fourthOption, correctAn
     
 
 def main():
+    QUESTION = "question"
+    OPTIONS = "options"
+    CORRECT_ANSWER = "correctAnswer"
+
     quiz = [
         {
-            "question": "What is the capital of France?",
-            "options": ["A. Berlin", "B. Madrid", "C. Paris", "D. Rome"],
-            "correctAnswer": ["C", "Paris"]
+            QUESTION: "What is the capital of France?",
+            OPTIONS: ["A. Berlin", "B. Madrid", "C. Paris", "D. Rome"],
+            CORRECT_ANSWER: ["C", "Paris"]
         },
     
         {
-            "question": "What planet is known as the Red Planet?",
-            "options": ["A. Earth", "B. Jupiter", "C. Mars", "D. Venus"],
-            "correctAnswer": ["C", "Mars"]
+            QUESTION: "What planet is known as the Red Planet?",
+            OPTIONS: ["A. Earth", "B. Jupiter", "C. Mars", "D. Venus"],
+            CORRECT_ANSWER: ["C", "Mars"]
         },
     
         {
-            "question": "What is the largest ocean in the world?",
-            "options": ["A. Atlantic Ocean", "B. Indian Ocean", "C. Pacific Ocean", "D. Northern Ocean"],
-            "correctAnswer": ["C", "Pacific Ocean"]
+            QUESTION: "What is the largest ocean in the world?",
+            OPTIONS: ["A. Atlantic Ocean", "B. Indian Ocean", "C. Pacific Ocean", "D. Northern Ocean"],
+            CORRECT_ANSWER: ["C", "Pacific Ocean"]
         }
     ]
 
     rightAnswers = 0
     for index, question in enumerate(quiz,1):
-        quizQuestion = "Question " + str(index) + ". " + question["question"]
+        quizQuestion = "Question " + str(index) + ". " + question[QUESTION]
         option1 = question["options"][0]
         option2 = question["options"][1]
         option3 = question["options"][2]
