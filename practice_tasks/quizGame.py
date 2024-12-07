@@ -61,4 +61,5 @@ def main():
 
     print(f"\nQuiz over! You got {rightAnswers} out of 3 questions right.")
 
-main()
+if __name__ == "__main__":
+    main()
