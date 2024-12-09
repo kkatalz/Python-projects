@@ -22,12 +22,14 @@ def fieldLook(field):
     print(field[ROW2])
     print(field["separator"] +"\n")
 
-def winner(player, row_parts, firstColumn_part, secColumn_part, thirdColumn_part):
+def winner(player, row_parts, firstColumn_part, secColumn_part, thirdColumn_part, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal):
   
     playerWinner = all(el.strip() == player for el in row_parts) or \
                    all(el.strip() == player for el in firstColumn_part) or \
                    all(el.strip() == player for el in secColumn_part) or \
-                   all(el.strip() == player for el in thirdColumn_part)
+                   all(el.strip() == player for el in thirdColumn_part) or \
+                   all(el.strip() == player for el in leftTopToRightBottomDiagonal) or \
+                   all(el.strip() == player for el in rightTopToLeftBottomDiagonal)
     return playerWinner
 
 
@@ -83,18 +85,20 @@ def fillField(field, player):
             firstColumn_part = [field[ROW0].split("|")[0].strip(), field[ROW1].split("|")[0].strip(), field[ROW2].split("|")[0].strip()]
             secColumn_part = [field[ROW0].split("|")[1].strip(), field[ROW1].split("|")[1].strip(), field[ROW2].split("|")[1].strip()]
             thirdColumn_part = [field[ROW0].split("|")[2].strip(), field[ROW1].split("|")[2].strip(), field[ROW2].split("|")[2].strip()]
-        
+            leftTopToRightBottomDiagonal = [field[ROW0].split("|")[0].strip(), field[ROW1].split("|")[1].strip(), field[ROW2].split("|")[2].strip()]
+            rightTopToLeftBottomDiagonal = [field[ROW0].split("|")[2].strip(), field[ROW1].split("|")[1].strip(), field[ROW2].split("|")[0].strip()]
+            
         elif row_parts[column].strip() == "X" or row_parts[column].strip() == "Y":
             print("That spot is already taken. Try again!")
             continue    
 
-        tieCondition = winner(firstPlayer, row_parts, firstColumn_part, secColumn_part, thirdColumn_part) and winner(secPlayer, row_parts, firstColumn_part, secColumn_part, thirdColumn_part)     
+        tieCondition = winner(firstPlayer, row_parts, firstColumn_part, secColumn_part, thirdColumn_part, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal) and winner(secPlayer, row_parts, firstColumn_part, secColumn_part, thirdColumn_part, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal)     
 
         if tieCondition: 
             print("That's a tie!")
             gameIsOver = True
 
-        elif winner(player, row_parts, firstColumn_part, secColumn_part, thirdColumn_part):
+        elif winner(player, row_parts, firstColumn_part, secColumn_part, thirdColumn_part, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal):
             print(f"Player {player} won!")
             gameIsOver = True
 
