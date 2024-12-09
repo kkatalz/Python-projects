@@ -1,8 +1,9 @@
 ROW0 = "row0"
 ROW1 = "row1"
 ROW2 = "row2"
+rows = [ROW0, ROW1, ROW2]
 firstPlayer = "X"
-secPlayer = "Y"
+secPlayer = "O"
 
 def gameField():
     field = {
@@ -14,66 +15,55 @@ def gameField():
     return field
 
 def fieldLook(field):
-    print("\n"+ field["separator"])
-    print(field[ROW0])
-    print(field["separator"])
-    print(field[ROW1])
-    print(field["separator"])
-    print(field[ROW2])
+    print("\n")
+    for row in rows:
+        print(field["separator"])
+        print(field[row])
     print(field["separator"] +"\n")
 
-def winner(player, row_parts, firstColumn_part, secColumn_part, thirdColumn_part, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal):
+def helperForWinner(player, fieldPlace):
+    return all(el.strip() == player for el in fieldPlace) 
+
+def winner(player, row_parts, firstColumn, secColumn, thirdColumn, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal):
   
-    playerWinner = all(el.strip() == player for el in row_parts) or \
-                   all(el.strip() == player for el in firstColumn_part) or \
-                   all(el.strip() == player for el in secColumn_part) or \
-                   all(el.strip() == player for el in thirdColumn_part) or \
-                   all(el.strip() == player for el in leftTopToRightBottomDiagonal) or \
-                   all(el.strip() == player for el in rightTopToLeftBottomDiagonal)
+    playerWinner = helperForWinner(player, row_parts) or \
+                    helperForWinner(player, firstColumn) or \
+                    helperForWinner(player, secColumn) or \
+                    helperForWinner(player, thirdColumn) or \
+                    helperForWinner(player, leftTopToRightBottomDiagonal) or \
+                    helperForWinner(player, rightTopToLeftBottomDiagonal)
     return playerWinner
 
+
+def fieldnputCheck(rowColoumn):
+    while True:
+            element = input(f"Enter the {rowColoumn} (0-2): ")
+            try:
+                element = int(element)
+                if element <0 or element >2:
+                    print("Invalid input")
+                    continue
+            except ValueError:
+                print("Invalid input")
+                continue
+            break
+    return element
+
+def columsValue(field, column, row0 = ROW0, row1 = ROW1, row2 = ROW2):
+    return [field[row0].split("|")[column].strip(), field[row1].split("|")[column].strip(), field[row2].split("|")[column].strip()]
 
 
 def fillField(field, player):
 
     while True:
-        while True:
-            row = input("Enter the row (0-2): ")
-            try:
-                row = int(row)
-                if row<0 or row>2:
-                    print("Invalid input")
-                    continue
-            except ValueError:
-                print("Invalid input")
-                continue
-            break
-        
-        while True:
-            column = input("Enter the column (0-2): ")
-            try:
-                column = int(column)
-                if column<0 or column>2:
-                    print("Invalid input")
-                    continue
-            except ValueError:
-                print("Invalid input")
-                continue
-            break
+        row = fieldnputCheck("row")
+        column = fieldnputCheck("column")
 
-        if row == 0:
-            row = ROW0
-        elif row == 1:
-            row = ROW1
-        elif row == 2:
-            row = ROW2
+        row = [ROW0, ROW1, ROW2] [row] #current row
+        row_parts = field[row].split("|")
 
         gameIsOver = False
 
-        row_parts = field[row].split("|")
-
-
-        
          # fill the spot 
         if row_parts[column].strip() == "":  
             row_parts[column] = f" {player} "
@@ -82,23 +72,25 @@ def fillField(field, player):
             fieldLook(field)       
 
             all_spots = field[ROW0].split("|") + field[ROW1].split("|") + field[ROW2].split("|")
-            firstColumn_part = [field[ROW0].split("|")[0].strip(), field[ROW1].split("|")[0].strip(), field[ROW2].split("|")[0].strip()]
-            secColumn_part = [field[ROW0].split("|")[1].strip(), field[ROW1].split("|")[1].strip(), field[ROW2].split("|")[1].strip()]
-            thirdColumn_part = [field[ROW0].split("|")[2].strip(), field[ROW1].split("|")[2].strip(), field[ROW2].split("|")[2].strip()]
+            
+            firstColumn = columsValue(field, 0)
+            secColumn = columsValue(field, 1)
+            thirdColumn = columsValue(field, 2)
+            
             leftTopToRightBottomDiagonal = [field[ROW0].split("|")[0].strip(), field[ROW1].split("|")[1].strip(), field[ROW2].split("|")[2].strip()]
             rightTopToLeftBottomDiagonal = [field[ROW0].split("|")[2].strip(), field[ROW1].split("|")[1].strip(), field[ROW2].split("|")[0].strip()]
             
-        elif row_parts[column].strip() == "X" or row_parts[column].strip() == "Y":
+        elif row_parts[column].strip() == firstPlayer or row_parts[column].strip() == secPlayer:
             print("That spot is already taken. Try again!")
             continue    
 
-        tieCondition = winner(firstPlayer, row_parts, firstColumn_part, secColumn_part, thirdColumn_part, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal) and winner(secPlayer, row_parts, firstColumn_part, secColumn_part, thirdColumn_part, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal)     
+        tieCondition = winner(firstPlayer, row_parts, firstColumn, secColumn, thirdColumn, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal) and winner(secPlayer, row_parts, firstColumn, secColumn, thirdColumn, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal)     
 
         if tieCondition: 
             print("That's a tie!")
             gameIsOver = True
 
-        elif winner(player, row_parts, firstColumn_part, secColumn_part, thirdColumn_part, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal):
+        elif winner(player, row_parts, firstColumn, secColumn, thirdColumn, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal):
             print(f"Player {player} won!")
             gameIsOver = True
 
