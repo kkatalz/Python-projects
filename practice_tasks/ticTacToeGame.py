@@ -3,7 +3,6 @@ ROW1 = "row1"
 ROW2 = "row2"
 firstPlayer = "X"
 secPlayer = "Y"
-gameIsOver = False
 
 def gameField():
     field = {
@@ -22,6 +21,16 @@ def fieldLook(field):
     print(field["separator"])
     print(field[ROW2])
     print(field["separator"] +"\n")
+
+def winner(player, row_parts, firstColumn_part, secColumn_part, thirdColumn_part):
+  
+    playerWinner = all(el.strip() == player for el in row_parts) or \
+                   all(el.strip() == player for el in firstColumn_part) or \
+                   all(el.strip() == player for el in secColumn_part) or \
+                   all(el.strip() == player for el in thirdColumn_part)
+    return playerWinner
+
+
 
 def fillField(field, player):
 
@@ -57,67 +66,63 @@ def fillField(field, player):
         elif row == 2:
             row = ROW2
 
-        row_parts = field[row].split("|")
-        firstColumn_part = (field[ROW0].split("|")[0] + field[ROW1].split("|")[0] + field[ROW2].split("|")[0]).replace(" ", "")
-        secColumn_part = (field[ROW0].split("|")[1] + field[ROW1].split("|")[1] + field[ROW2].split("|")[1]).replace(" ", "")
-        thirdColumn_part = (field[ROW0].split("|")[2] + field[ROW1].split("|")[2] + field[ROW2].split("|")[2]).replace(" ", "")
-        # print("First column: ", firstColumn_part)
+        gameIsOver = False
 
+        row_parts = field[row].split("|")
+
+
+        
+         # fill the spot 
         if row_parts[column].strip() == "":  
             row_parts[column] = f" {player} "
-            break
 
+            field[row] = "|".join(row_parts)
+            fieldLook(field)       
+
+            all_spots = field[ROW0].split("|") + field[ROW1].split("|") + field[ROW2].split("|")
+            firstColumn_part = [field[ROW0].split("|")[0].strip(), field[ROW1].split("|")[0].strip(), field[ROW2].split("|")[0].strip()]
+            secColumn_part = [field[ROW0].split("|")[1].strip(), field[ROW1].split("|")[1].strip(), field[ROW2].split("|")[1].strip()]
+            thirdColumn_part = [field[ROW0].split("|")[2].strip(), field[ROW1].split("|")[2].strip(), field[ROW2].split("|")[2].strip()]
+        
         elif row_parts[column].strip() == "X" or row_parts[column].strip() == "Y":
             print("That spot is already taken. Try again!")
-            continue  
+            continue    
 
-        elif all([x.strip() != "" for x in row_parts]):
-            print("All spots are taken. Game over!")
-            gameIsOver = True
-            
-        
-        elif all([x.strip() == firstPlayer for x in row_parts]) or all(el == firstPlayer for el in firstColumn_part) or all(el == firstPlayer for el in secColumn_part) or all(el == firstPlayer for el in thirdColumn_part):
-            print(f"Player {firstPlayer} won!")
-            gameIsOver = True
-            
-        elif all([y.strip() ==secPlayer for y in row_parts]) or all(el == secPlayer for el in firstColumn_part) or all(el == secPlayer for el in secColumn_part) or all(el == secPlayer for el in thirdColumn_part):
-            print(f"Player {secPlayer} won!")
-            gameIsOver = True
-            
-        
-        else:
+        tieCondition = winner(firstPlayer, row_parts, firstColumn_part, secColumn_part, thirdColumn_part) and winner(secPlayer, row_parts, firstColumn_part, secColumn_part, thirdColumn_part)     
+
+        if tieCondition: 
             print("That's a tie!")
             gameIsOver = True
-            
+
+        elif winner(player, row_parts, firstColumn_part, secColumn_part, thirdColumn_part):
+            print(f"Player {player} won!")
+            gameIsOver = True
+
+        elif all([spot.strip() != "" for spot in all_spots]):
+            print("All spots are taken. Game over!")
+            gameIsOver = True        
+
         if gameIsOver:
-            break
-            
+            return True
+    
+        break
 
-
-
-    field[row] = "|".join(row_parts)
-    fieldLook(field)
-
+        
 def main():
 
     print("Welcome to Tic Tac Toe!")
     field = gameField()
     fieldLook(field)
 
-    # do{}
-
-
+    players = [firstPlayer, secPlayer]
     while True:
-    
-        print(f"Player {firstPlayer}'s turn")
-        
-        if not fillField(field, firstPlayer):
-            continue 
+        for player in players:
+            print(f"Player {player}'s turn")
 
-        print(f"Player {secPlayer}'s turn")
-        if not fillField(field, secPlayer):
-            continue
-
+            if fillField(field, player):
+                exit()
+            else:
+                continue
 
 
 if __name__ == "__main__":
