@@ -1,9 +1,11 @@
+from colorama import Fore, Style
+
 ROW0 = "row0"
 ROW1 = "row1"
 ROW2 = "row2"
 rows = [ROW0, ROW1, ROW2]
-firstPlayer = "X"
-secPlayer = "O"
+firstPlayer = f"{Fore.GREEN}X{Style.RESET_ALL}"
+secPlayer = f"{Fore.BLUE}O{Style.RESET_ALL}"
 
 def gameField():
     field = {
@@ -72,7 +74,7 @@ def fillField(field, player):
             fieldLook(field)       
 
             all_spots = field[ROW0].split("|") + field[ROW1].split("|") + field[ROW2].split("|")
-            
+
             firstColumn = columsValue(field, 0)
             secColumn = columsValue(field, 1)
             thirdColumn = columsValue(field, 2)
@@ -91,7 +93,7 @@ def fillField(field, player):
             gameIsOver = True
 
         elif winner(player, row_parts, firstColumn, secColumn, thirdColumn, leftTopToRightBottomDiagonal, rightTopToLeftBottomDiagonal):
-            print(f"Player {player} won!")
+            print(f"{Fore.LIGHTMAGENTA_EX}Player {player} won!{Style.RESET_ALL}")
             gameIsOver = True
 
         elif all([spot.strip() != "" for spot in all_spots]):
