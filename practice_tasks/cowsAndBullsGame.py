@@ -42,20 +42,15 @@ def main():
     while True:
         guess = input("Guess: ").strip()
 
-        try:
-           if not guess.isdigit() or len(guess) != 4 or len(set(guess)) != 4:
-                raise ValueError
-            
-        except ValueError:
-            print("Invalid input. Please enter a 4 digit unique number.")
-            continue
         
-        bulls = check_cows_and_bulls(secret_number, guess)
-        if  bulls != 4:
-            continue
+        if guess.isdigit() and len(guess) == 4 and len(set(guess)) == 4:
+            bulls = check_cows_and_bulls(secret_number, guess)
+            if  bulls == 4:
+                print(f"\nCongratulations! You've guessed the number {secret_number}.")
+                break
+
         else:
-            print(f"\nCongratulations! You've guessed the number {secret_number}.")
-            break
+            print("Invalid input. Please enter a 4 digit unique number.")
         
 if __name__ == "__main__":
     main()
