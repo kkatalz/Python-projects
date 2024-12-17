@@ -1,5 +1,13 @@
 import random
 
+# RULES:
+# 1. The game is played between two players. One player is the coputer and the other is the user.
+# 2. The computer generates a 4-digit number with unique digits.
+# 3. The user has to guess the number.
+# 4. If the user's guess has a digit in the correct position, it's a "bull".
+# 5. If the user's guess has a digit in the wrong position, it's a "cow".
+# 6. The user continues to guess until they guess the number correctly.
+
 def generate_number():
     number = random.randint(1000, 9999)
     while len(set(str(number))) != 4:
