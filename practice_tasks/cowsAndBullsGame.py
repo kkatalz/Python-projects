@@ -21,14 +21,9 @@ def check_cows_and_bulls(number, guess):
     secret_number = str(number)
     guess = str(guess)
 
-    for i, digit in enumerate(guess):
+    bulls = sum([1 for i in range(4) if guess[i] == secret_number[i]])
+    cows = sum([1 for i in range(4) if guess[i] in secret_number]) - bulls
 
-        if digit == secret_number[i]:
-            bulls += 1
-
-        elif digit in secret_number:
-            cows += 1
-    
     print(f"{cows} cows, {bulls} bulls")
     return bulls
 
