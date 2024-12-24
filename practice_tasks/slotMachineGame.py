@@ -5,7 +5,7 @@ current_balance = 0
 
 choice_icons = ("🍉", "🍋", "🍇", "🥑", "🍗")
 
-def choose_icon():
+def choose_icons():
     first_icon = random.choice(choice_icons)
     sec_icon = random.choice(choice_icons)
     trd_icon = random.choice(choice_icons)
@@ -14,28 +14,29 @@ def choose_icon():
     icons_set = (first_icon, sec_icon, trd_icon)
     return icons_set
 
-def check_victory(set_icons, starting_balance, bet_amount):
+def calculate_current_balance(bet_amount, winning_money):
     global current_balance
-    winning_money = 0
+    current_balance += (winning_money - bet_amount)   
+    current_balance = round(current_balance,3)
 
-    starting_balance = int (starting_balance)
-    bet_amount = int(bet_amount)
-    
+def check_victory(set_icons, bet_amount):
+    global current_balance
+    winning_money = 0    
     first_icon, sec_icon, trd_icon = set_icons
 
     if first_icon == sec_icon == trd_icon:
         winning_money = bet_amount * 10
         print(f"You won {winning_money}!")
-        current_balance = int(current_balance) - bet_amount + winning_money
+        calculate_current_balance(bet_amount, winning_money)
 
 
     elif first_icon == sec_icon or sec_icon == trd_icon or first_icon == trd_icon:
         winning_money = bet_amount * 2
         print(f"You won {bet_amount * 2}!")
-        current_balance = int(current_balance) - bet_amount + winning_money
+        calculate_current_balance(bet_amount, winning_money)
     
     else:
-        current_balance = int(current_balance) - bet_amount + winning_money
+        calculate_current_balance(bet_amount, winning_money)
         print("You lost!")
         if current_balance <=0:
             print("You are out of money! Game is over.")
@@ -43,29 +44,26 @@ def check_victory(set_icons, starting_balance, bet_amount):
     
     return current_balance
 
-def game(starting_balance):
+def game():
     global current_balance
-    current_balance = int(current_balance)
-    play_again = True
 
-    while play_again:
-        starting_balance = int(starting_balance) 
+    while True:
         print(f"\nCurrent ballance: ${current_balance}")
 
         while True:
-            bet_amount = input("Enter your bet amount: $").strip()
-            if not bet_amount.isdigit():
+            bet_amount = float(input("Enter your bet amount: $").strip())
+            try:
+                if bet_amount > current_balance or bet_amount < 1:    
+                    print(f"Invalid bet amount. You can bet between $1 and ${current_balance}")   
+                else:
+                    break
+
+            except ValueError:
                 print("Please enter a valid number for the bet amount")
-                continue
+            
 
-            elif int(bet_amount) > current_balance or int(bet_amount) < 1:    
-                print(f"Invalid bet amount. You can bet between $1 and ${current_balance}")
-                continue
-            break
-
-
-        set_icons = choose_icon()
-        check_victory(set_icons, starting_balance, bet_amount)
+        set_icons = choose_icons()
+        check_victory(set_icons, bet_amount)
 
         while True:
             play_again_answer = input("\nDo you want to play again? (y/n): ").strip().lower()
@@ -79,21 +77,22 @@ def game(starting_balance):
                 print("Incorrect input")
                 continue
 
-
-def main():
+def get_staring_balance():
     global current_balance
     while True:
-        starting_balance= input("Enter your starting balance: $").strip()
-        if not starting_balance.isdigit():
+        try:
+            balance = float(input("Enter your starting balance: $").strip())
+            if balance <= 0:
+                print("Balance must be a positive number") 
+            else:
+                current_balance = balance
+                return
+        except ValueError:
             print("Please enter a valid number")
-            continue
-        elif int(starting_balance) <= 0:
-            print("Balance must be a positive number") 
-            continue
 
-        current_balance = starting_balance
-        break
-    game(starting_balance)
+def main():
+    get_staring_balance()
+    game()
 
 
 
