@@ -10,20 +10,30 @@ random_word = ""
 guessed_part = []
 
 
-def generate_random_word():
+def choose_random_word():
 
     global random_word, guessed_part
 
-    dir_location = os.path.dirname(os.path.abspath(__file__))
-    words_file = os.path.join(dir_location,"words.txt")
+    try:
+        dir_location = os.path.dirname(os.path.abspath(__file__))
+        words_file = os.path.join(dir_location,"words.txt")
 
-    with open(words_file, "r") as f:
-        words_list = f.readlines()
-        words_list = [word.strip() for word in words_list]
-        random_word = random.choice(words_list)
-        guessed_part = ["_"] * len(random_word)
-        print("\n",random_word)
-        print("---" * 5)
+        with open(words_file, "r") as f:
+            words_list = f.readlines()
+            
+            if not words_list: 
+                print("File is empty")
+                exit()
+                
+            words_list = [word.strip() for word in words_list]
+            random_word = random.choice(words_list)
+            guessed_part = ["_"] * len(random_word)
+            print("\n",random_word)
+            print("---" * 5)
+    
+    except FileNotFoundError:
+        print("File words.txt does not exist")
+        exit()
 
     return random_word
 
@@ -55,7 +65,7 @@ def make_guess(random_word):
 
     while True:
         if tries_left == 0:
-            print(f"\nThe game is over. The secret word was: {random_word})")
+            print(f"\nThe game is over. The secret word was: {random_word}")
             exit()
         
         elif "_" not in guessed_part:
@@ -78,7 +88,7 @@ def make_guess(random_word):
     
 
 def main():
-    random_word = generate_random_word()
+    random_word = choose_random_word()
     make_guess(random_word)
         
 
