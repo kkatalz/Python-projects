@@ -8,7 +8,7 @@ choice_icons = ("🍉", "🍋", "🍇", "🥑", "🍗")
 
 def choose_icons():
     icons_list = [random.choice(choice_icons) for _ in range(3)]
-    print(f"{icons_list[0]} | {icons_list[1]} | {icons_list[2]}")
+    print(f"\n{icons_list[0]} | {icons_list[1]} | {icons_list[2]}")
     return icons_list
 
 
