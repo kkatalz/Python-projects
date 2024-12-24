@@ -26,18 +26,26 @@ def check_victory(set_icons, starting_balance, bet_amount):
     if first_icon == sec_icon == trd_icon:
         winning_money = bet_amount * 10
         print(f"You won {winning_money}!")
+        current_balance = int(current_balance) - bet_amount + winning_money
+
 
     elif first_icon == sec_icon or sec_icon == trd_icon or first_icon == trd_icon:
         winning_money = bet_amount * 2
         print(f"You won {bet_amount * 2}!")
+        current_balance = int(current_balance) - bet_amount + winning_money
     
     else:
+        current_balance = int(current_balance) - bet_amount + winning_money
         print("You lost!")
+        if current_balance <=0:
+            print("You are out of money! Game is over.")
+            exit()
     
-    current_balance = int(current_balance) - bet_amount + winning_money
     return current_balance
 
 def game(starting_balance):
+    global current_balance
+    current_balance = int(current_balance)
     play_again = True
 
     while play_again:
@@ -50,7 +58,7 @@ def game(starting_balance):
                 print("Please enter a valid number for the bet amount")
                 continue
 
-            elif int(bet_amount) > starting_balance or int(bet_amount) < 1:    
+            elif int(bet_amount) > current_balance or int(bet_amount) < 1:    
                 print(f"Invalid bet amount. You can bet between $1 and ${current_balance}")
                 continue
             break
@@ -60,7 +68,7 @@ def game(starting_balance):
         check_victory(set_icons, starting_balance, bet_amount)
 
         while True:
-            play_again_answer = input("Do you want to play again? (y/n): ").strip().lower()
+            play_again_answer = input("\nDo you want to play again? (y/n): ").strip().lower()
 
             if play_again_answer in ('y', 'yes'):
                 break
