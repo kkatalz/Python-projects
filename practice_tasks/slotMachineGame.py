@@ -1,5 +1,19 @@
 # if two images match you win two times more
 # if 3 match then you win 10 times more
+import random
+
+choice_icons = ("🍉", "🍋", "🍇", "🥑", "🍗")
+
+def choose_icon():
+    first_icon = random.choice(choice_icons)
+    sec_icon = random.choice(choice_icons)
+    trd_icon = random.choice(choice_icons)
+    print(f"{first_icon} | {sec_icon} | {trd_icon}")
+
+    icons_set = (first_icon, sec_icon, trd_icon)
+    return icons_set
+
+
 
 def game(starting_balance):
     starting_balance = int(starting_balance) 
@@ -15,6 +29,10 @@ def game(starting_balance):
             print(f"Invalid bet amount. You can bet between $1 and ${starting_balance}")
             continue
         break
+
+    set_icons = choose_icon()
+    # check_victory(set_icons, starting_balance, bet_amount)
+
 
 
 
