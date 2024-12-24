@@ -7,22 +7,19 @@ bet_amount = 0
 choice_icons = ("🍉", "🍋", "🍇", "🥑", "🍗")
 
 def choose_icons():
-    first_icon = random.choice(choice_icons)
-    sec_icon = random.choice(choice_icons)
-    trd_icon = random.choice(choice_icons)
-    print(f"\n{first_icon} | {sec_icon} | {trd_icon}")
+    icons_list = [random.choice(choice_icons) for _ in range(3)]
+    print(icons_list)
+    return icons_list
 
-    icons_set = (first_icon, sec_icon, trd_icon)
-    return icons_set
 
 def calculate_current_balance(winning_money):
     global current_balance
     current_balance += (winning_money - bet_amount)   
     current_balance = round(current_balance,3)
 
-def check_victory(set_icons):
+def check_victory(icons_list):
     winning_money = 0    
-    first_icon, sec_icon, trd_icon = set_icons
+    first_icon, sec_icon, trd_icon = icons_list
 
     if first_icon == sec_icon == trd_icon:
         winning_money = bet_amount * 10
@@ -47,8 +44,8 @@ def check_victory(set_icons):
 def get_bet_amount():
     global bet_amount
     while True:
-            bet_amount = float(input("Enter your bet amount: $").strip())
             try:
+                bet_amount = float(input("Enter your bet amount: $").strip())
                 if bet_amount > current_balance or bet_amount < 1:    
                     print(f"Invalid bet amount. You can bet between $1 and ${current_balance}")   
                 else:
@@ -74,8 +71,8 @@ def game():
     while True:
         print(f"\nCurrent ballance: ${current_balance}")
         get_bet_amount()
-        set_icons = choose_icons()
-        check_victory(set_icons)
+        icons_list = choose_icons()
+        check_victory(icons_list)
         play_again()
 
 def get_staring_balance():
