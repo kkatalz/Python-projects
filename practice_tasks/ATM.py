@@ -1,16 +1,30 @@
 class ATM():
 
-    def __init__(self, balance):
-        self.balance = balance
+    def __init__(self):
+        self.balance = 0
+
+    def get_balance(self):
+        return self.balance
+
+
+    def make_deposit(self, deposit):
+        self.balance = deposit
+            
+    def withdraw_money(self, withdrawal_amount):
+         self.balance -= withdrawal_amount
+       
+
+class ATM_UI():
+    def __init__(self):
+        self.ATM = ATM()
 
     def show_program_options(self):
         options = ("Check Balance", "Deposit", "Withdraw", "Exit")
         for i, value in enumerate(options, start=1):
             print(f"{i}. {value}")
 
-
     def show_balance(self):
-        print(f"\nYour current balance is: ${self.balance}")
+        print(f"\nYour current balance is: ${self.ATM.get_balance()}")
 
 
     def make_deposit(self):
@@ -21,37 +35,32 @@ class ATM():
                     print("Deposit amount must be positive.")
 
                 else:
-                    self.balance = deposit_amount
+                    self.ATM.make_deposit(deposit_amount)
                     print(f"Sucessfuly deposited ${deposit_amount}.")
                     return
             except ValueError:
                 print("Please enter a valid number.")
 
-
     def withdraw_money(self):
-        if self.balance > 0:
-            
+        balance = self.ATM.get_balance()
+        if balance > 0:
             while True:
                 try:
                     withdrawal_amount = float(input("\nEnter the amount to withdraw: $").strip())
                     if withdrawal_amount <= 0:
                         print("Witdrawal amount must be positive.")
 
-                    elif withdrawal_amount > self.balance:
+                    elif withdrawal_amount > balance:
                         print("Insufficient funds.")
 
                     else:
-                        self.balance -= withdrawal_amount
+                        self.ATM.withdraw_money(withdrawal_amount)
                         print(f"Sucessfuly withdrew ${withdrawal_amount}.")
                         return
                 except ValueError:
                     print("Please enter a valid number.")
         else:
-            print(f"Your balance is {self.balance}. There is no money to withdraw")
-
-    def exit_program(self):
-        print("Exiting program. Goodbye!")
-        exit()
+            print(f"Your balance is {balance}. There is no money to withdraw")
 
     def program_operations(self):
         return {
@@ -60,9 +69,7 @@ class ATM():
         "3": self.withdraw_money,
         "4": self.exit_program
         }
-
-        
-
+    
     def get_user_option(self):
         while True:
             try:
@@ -74,20 +81,26 @@ class ATM():
             except ValueError:
                 print("Type a number for the corresponding operation")
 
+    def exit_program(self):
+        print("Exiting program. Goodbye!")
+        exit()
 
-    def main(self):
-        
-        while True:
-            print("\nWelcome to the ATM!")
-            self.show_program_options()
-            option = self.get_user_option()
-            operation = self.program_operations().get(str(option))
-            if operation:
-                operation()
-            else:
-                print("Invalid option. PLease try again.")
+
+def main():
+    atm = ATM_UI()
+
+    while True:
+        print("\nWelcome to the ATM!")
+        atm.show_program_options()
+        option = atm.get_user_option()
+        operation = atm.program_operations().get(str(option))
+        if operation:
+            operation()
+        else:
+            print("Invalid option. PLease try again.")
+
+if __name__ == "main":
+    main()
     
      
-    
-ATM = ATM(0)
-ATM.main()
+main()
