@@ -16,7 +16,7 @@ class ATM():
         
 
     def show_balance(self):
-        print(f"Your current balance is: ${self.balance}")
+        print(f"\nYour current balance is: ${self.balance}")
 
     def make_deposit(self):
         while True:
@@ -32,7 +32,22 @@ class ATM():
             except ValueError:
                 print("Please enter a valid number.")
 
+    def withdraw_money(self):
+         while True:
+            try:
+                withdrawal_amount = float(input("\nEnter the amount to withdraw: ").strip())
+                if withdrawal_amount <= 0:
+                    print("Witdrawal amount must be positive.")
 
+                elif withdrawal_amount > self.balance:
+                    print("Insufficient funds.")
+
+                else:
+                    self.balance -= withdrawal_amount
+                    print(f"Sucessfuly withdrew ${withdrawal_amount}.")
+                    return
+            except ValueError:
+                print("Please enter a valid number.")
 
 
     def main(self):
@@ -42,10 +57,10 @@ class ATM():
 
         # chosen_option = input("Please choose an option: ").strip()
         
-        self.make_deposit()
+        self.withdraw_money()
         print(self.balance)
     
      
     
-ATM = ATM(0)
+ATM = ATM(220)
 ATM.main()
